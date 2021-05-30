@@ -1,0 +1,14 @@
+<table class="info-table">
+        <tr (click)="sortColumnHandler($event)">
+            <th id="name">Имя пользователя</th>
+            <th id="city">Название города</th>
+            <th id="title">Название публикации</th>
+            <th id="commentsAmount">Количество комментариев</th>
+        </tr>
+        <tr *ngFor="let info of infoList; let i = index">
+            <td>{{info.name}}</td>
+            <td>{{info.city}}</td>
+            <td>{{info.title}}</td>
+            <td>{{info.commentsAmount}}</td>
+        </tr>
+</table>

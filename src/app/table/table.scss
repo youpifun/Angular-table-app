@@ -1,0 +1,35 @@
+.info-table{
+	border: 1px solid gray;
+	table-layout: fixed;
+    border-collapse: collapse;
+	width: 100%;
+	margin-bottom: 20px;
+}
+.info-table th {
+    cursor: pointer;
+	font-weight: normal;
+	padding: 5px;
+	background: #bebebe;
+	border: 1px solid gray;
+    &:hover {
+        background: #9c9c9c;
+    }
+}
+
+.info-table td{
+	padding: 5px 10px;
+	border: 1px solid gray;
+	text-align: left;
+}
+
+.info-table tr:nth-child(odd){
+	background: #fff;
+}
+
+.info-table tr:nth-child(even){
+	background: #e7e7e7;
+}
+
+.info-table .sorted {
+    font-weight: bold;
+}
