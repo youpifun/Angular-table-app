@@ -1,0 +1,14 @@
+<div class="modal">
+    <div class="modal-container">
+        <div class="modal-container__publishing-text">
+
+        </div>
+        <div class="modal-container__comments">
+            <h2>Комментарии:({{modalData.commentsAmount}})</h2>
+            <hr/>
+            <div *ngFor="let comment of modalData.comments">
+                {{comment.email}}
+            </div>
+        </div>
+    </div>
+</div>

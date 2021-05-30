@@ -1,5 +1,7 @@
+$grayBorder: 1px solid gray;
+
 .info-table{
-	border: 1px solid gray;
+	border: $grayBorder;
 	table-layout: fixed;
     border-collapse: collapse;
 	width: 100%;
@@ -10,7 +12,7 @@
 	font-weight: normal;
 	padding: 5px;
 	background: #bebebe;
-	border: 1px solid gray;
+	border: $grayBorder;
     &:hover {
         background: #9c9c9c;
     }
@@ -18,16 +20,21 @@
 
 .info-table td{
 	padding: 5px 10px;
-	border: 1px solid gray;
+	border: $grayBorder;
 	text-align: left;
 }
 
-.info-table tr:nth-child(odd){
-	background: #fff;
-}
-
-.info-table tr:nth-child(even){
-	background: #e7e7e7;
+.info-table__row{
+	cursor: pointer;
+	&:hover{
+		background: #bbbbbb !important;
+	}
+	&:nth-child(odd) {
+		background: #fff;
+	}
+	&:nth-child(even){
+		background: #e7e7e7;
+	}
 }
 
 .info-table .sorted {

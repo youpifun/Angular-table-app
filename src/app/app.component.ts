@@ -1,14 +1,26 @@
 import { Component } from "@angular/core";
-import { DataService, UsersData } from "./data.service";
+import { DataService, UsersData, ModalData } from "./data.service";
 import { sortColumn, reverseColumn } from "./utils";
 
 @Component({
     selector: "table-app",
-    template: `<info-table [infoList]="infoList" (headerClicked)="sortColumnHandler($event)"></info-table>`,
+    template: `<modal-window *ngIf="isModalActive" [modalData]="modalData"></modal-window>
+                <info-table 
+                    [infoList]="infoList" 
+                    (headerClicked)="sortColumnHandler($event)" 
+                    (rowClicked)="toggleModal($event)"
+                >
+                </info-table>`,
     providers: [DataService]
 })
 export class AppComponent { 
     infoList: UsersData = [];
+    isModalActive: boolean = false;
+    modalData: ModalData | null = {
+        commentsAmount: 0,
+        postText: "",
+        comments: []
+    };
 
     constructor(private dataService : DataService){}
 
@@ -32,5 +44,21 @@ export class AppComponent {
         });
         this.infoList = sortColumn(this.infoList, target.id);
         target.classList.add("sorted");
+    }
+
+    toggleModal(index: number) {
+        this.isModalActive = !this.isModalActive;
+        if (this.isModalActive) {
+            this.modalData.commentsAmount = this.infoList[index].commentsAmount;
+            this.modalData.postText = this.infoList[index].text;
+            this.dataService.getPostComments(this.infoList[index].id)
+            .then(res => this.modalData.comments = res);
+            return;
+        }
+        this.modalData = {
+            commentsAmount: 0,
+            postText: "",
+            comments: []
+        };
     }
 }

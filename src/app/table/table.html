@@ -1,11 +1,11 @@
 <table class="info-table">
-        <tr (click)="handleHeaderClick($event)">
+        <tr class="info-table__row" (click)="handleHeaderClick($event)">
             <th id="name">Имя пользователя</th>
             <th id="city">Название города</th>
             <th id="title">Название публикации</th>
             <th id="commentsAmount">Количество комментариев</th>
         </tr>
-        <tr *ngFor="let info of infoList; let i = index">
+        <tr class="info-table__row" *ngFor="let info of infoList; let i = index" (click)="handleRowClick(i)">
             <td>{{info.name}}</td>
             <td>{{info.city}}</td>
             <td>{{info.title}}</td>
