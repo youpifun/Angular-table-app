@@ -1,3 +1,8 @@
+@mixin columnFlex {
+    display: flex;
+    flex-direction: column;
+}
+
 .modal {
     position: fixed;
     display: flex;
@@ -10,10 +15,8 @@
 }
 
 .modal-container {
+    @include columnFlex;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-content: space-between;
     width: 80%;
     height: 75%;
     background: whitesmoke;
@@ -24,20 +27,18 @@
     overflow-y: hidden;
 }
 
-.modal-container__publishing-info {
+.modal-container__publishing-info,.modal-container__comments-wrapper {
+    @include columnFlex;
     flex-grow: 1;
     justify-content: space-evenly;
-    flex-direction: column;
-    display: flex;
+}
+
+.modal-container__publishing-info {
     margin-bottom: 2%;
 }
 
 .modal-container__comments-wrapper {
-    flex-grow: 1;
     height: 45%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
 }
 
 .modal-container__close-btn {
