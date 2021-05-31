@@ -60,11 +60,7 @@ export class AppComponent {
     toggleModal(index: number) {
         this.isModalActive = !this.isModalActive;
         if (this.isModalActive) {
-            this.modalData.postTitle = this.realInfoList[index].title;
-            this.modalData.commentsAmount = this.realInfoList[index].commentsAmount;
-            this.modalData.postText = this.realInfoList[index].text;
-            this.dataService.getPostComments(this.realInfoList[index].id)
-            .then(res => this.modalData.comments = res);
+            this.fillModalData(index);
             return;
         }
         this.modalData = {
@@ -74,6 +70,16 @@ export class AppComponent {
             comments: []
         };
         return;
+    }
+
+    fillModalData(index: number) {
+        let modalData = this.modalData;
+        let currentRow = this.realInfoList[index];
+        modalData.postTitle = currentRow.title;
+        modalData.commentsAmount = currentRow.commentsAmount;
+        modalData.postText = currentRow.text;
+        this.dataService.getPostComments(currentRow.id)
+        .then(res => modalData.comments = res);
     }
 
     handleFilterData(filterText: string) {

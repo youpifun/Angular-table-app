@@ -1,10 +1,10 @@
 import { UsersData } from "./data.service"
 
-export function sortColumn(data: UsersData, field:string) {
+export function sortColumn(data: UsersData, field:string): UsersData {
     return data.sort((a, b) => a[field] > b[field] ? 1 : -1);
 }
 
-export function reverseColumn(data: UsersData) {
+export function reverseColumn(data: UsersData): UsersData {
     return data.reverse();
 }
 
