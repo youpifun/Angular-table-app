@@ -1,25 +1,29 @@
 import { Component } from "@angular/core";
 import { DataService, UsersData, ModalData } from "./data.service";
-import { sortColumn, reverseColumn } from "./utils";
+import { sortColumn, reverseColumn, filterData, removeSortsFromTableHeaders } from "./utils";
 
 @Component({
     selector: "table-app",
     template: `<modal-window 
                     *ngIf="isModalActive"
                     [modalData]="modalData"
-                    (modalClicked)="toggleModal()"></modal-window>
+                    (modalClicked)="toggleModal()"
+                ></modal-window>
+                <search
+                    (filterStringInputed)="handleFilterData($event)"
+                ></search>
                 <info-table 
-                    [infoList]="infoList" 
+                    [infoList]="realInfoList" 
                     (headerClicked)="sortColumnHandler($event)" 
                     (rowClicked)="toggleModal($event)"
-                >
-                </info-table>`,
+                ></info-table>`,
     providers: [DataService]
 })
 export class AppComponent { 
-    infoList: UsersData = [];
+    fullInfoList: UsersData = [];
+    realInfoList: UsersData = [];
     isModalActive: boolean = false;
-    modalData: ModalData | null = {
+    modalData: ModalData = {
         postTitle: "",
         commentsAmount: 0,
         postText: "",
@@ -32,7 +36,8 @@ export class AppComponent {
         (async () => {
             let res = await this.dataService.getUsersData();
             Promise.all(res).then(res=>{
-                this.infoList = res;
+                this.fullInfoList = res;
+                this.realInfoList = res;
             });
         })();
     }
@@ -40,23 +45,21 @@ export class AppComponent {
     sortColumnHandler($event: MouseEvent) {
         let target = $event.target as Element;
         if (target.classList.contains("sorted")) {
-            this.infoList = reverseColumn(this.infoList);
+            this.realInfoList = reverseColumn(this.realInfoList);
             return;
         }
-        Array.from(document.getElementsByTagName("th")).forEach(element => {
-            if (element.classList.contains("sorted")) element.classList.remove("sorted");
-        });
-        this.infoList = sortColumn(this.infoList, target.id);
+        removeSortsFromTableHeaders();
+        this.realInfoList = sortColumn(this.realInfoList, target.id);
         target.classList.add("sorted");
     }
 
     toggleModal(index: number) {
         this.isModalActive = !this.isModalActive;
         if (this.isModalActive) {
-            this.modalData.postTitle = this.infoList[index].title;
-            this.modalData.commentsAmount = this.infoList[index].commentsAmount;
-            this.modalData.postText = this.infoList[index].text;
-            this.dataService.getPostComments(this.infoList[index].id)
+            this.modalData.postTitle = this.realInfoList[index].title;
+            this.modalData.commentsAmount = this.realInfoList[index].commentsAmount;
+            this.modalData.postText = this.realInfoList[index].text;
+            this.dataService.getPostComments(this.realInfoList[index].id)
             .then(res => this.modalData.comments = res);
             return;
         }
@@ -67,5 +70,10 @@ export class AppComponent {
             comments: []
         };
         return;
+    }
+
+    handleFilterData(filterText: string) {
+        removeSortsFromTableHeaders();
+        this.realInfoList = filterData(this.fullInfoList, filterText);
     }
 }
