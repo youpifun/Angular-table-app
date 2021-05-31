@@ -10,11 +10,15 @@ import { UsersData } from "../data.service";
 
 export class Table {
     @Input() infoList: UsersData;
-    @Output() headerClicked = new EventEmitter<MouseEvent>();
+    @Output() headerClicked = new EventEmitter<Element>();
     @Output() rowClicked = new EventEmitter<number>();
 
     handleHeaderClick($event: MouseEvent) {
-        this.headerClicked.emit($event);
+        let target = $event.target as Element;
+        if (target.id == "sort-icon") {
+            target = target.parentElement;
+        }
+        this.headerClicked.emit(target);
     }
 
     handleRowClick(index: number) {

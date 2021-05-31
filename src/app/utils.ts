@@ -16,6 +16,10 @@ export function filterData(data: UsersData, filterString: string): UsersData {
 }
 
 export function removeSortsFromTableHeaders() {
+    let icon = document.getElementById("sort-icon");
+    if (icon != null){
+        icon.remove();
+    }
     Array.from(document.getElementsByTagName("th")).forEach(element => {
         if (element.classList.contains("sorted")) element.classList.remove("sorted");
     });

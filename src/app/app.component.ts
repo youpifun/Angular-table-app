@@ -42,13 +42,17 @@ export class AppComponent {
         })();
     }
     
-    sortColumnHandler($event: MouseEvent) {
-        let target = $event.target as Element;
+    sortColumnHandler(target: Element) {
         if (target.classList.contains("sorted")) {
+           document.getElementById("sort-icon").classList.toggle("rotated");
             this.realInfoList = reverseColumn(this.realInfoList);
             return;
         }
         removeSortsFromTableHeaders();
+        let sortIcon = document.createElement("img");
+        sortIcon.src = "assets/arrow.svg"
+        sortIcon.id = "sort-icon";
+        target.appendChild(sortIcon);
         this.realInfoList = sortColumn(this.realInfoList, target.id);
         target.classList.add("sorted");
     }
