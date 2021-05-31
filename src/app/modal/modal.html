@@ -1,14 +1,20 @@
-<div class="modal">
+<div class="modal" (click)="handleModalClick($event)">
     <div class="modal-container">
-        <div class="modal-container__publishing-text">
-
+        <div class="modal-container__publishing-info">
+            <h2>Название: <span class="post-title">{{modalData.postTitle}}</span></h2>
+            <hr/>
+            <h3>Текст: <span class="post-text">{{modalData.postText}}</span></h3>
         </div>
-        <div class="modal-container__comments">
+        <div class="modal-container__comments-wrapper">
             <h2>Комментарии:({{modalData.commentsAmount}})</h2>
             <hr/>
-            <div *ngFor="let comment of modalData.comments">
-                {{comment.email}}
+            <div class="comments-block">
+                <div class="comment" *ngFor="let comment of modalData.comments">
+                    <div class="comment__email">{{comment.email}}:</div>
+                    <div class="comment__text">{{comment.commentText}}</div>
+                </div>
             </div>
         </div>
+        <button class="modal-container__close-btn">X</button>
     </div>
 </div>

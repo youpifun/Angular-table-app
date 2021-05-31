@@ -4,7 +4,10 @@ import { sortColumn, reverseColumn } from "./utils";
 
 @Component({
     selector: "table-app",
-    template: `<modal-window *ngIf="isModalActive" [modalData]="modalData"></modal-window>
+    template: `<modal-window 
+                    *ngIf="isModalActive"
+                    [modalData]="modalData"
+                    (modalClicked)="toggleModal()"></modal-window>
                 <info-table 
                     [infoList]="infoList" 
                     (headerClicked)="sortColumnHandler($event)" 
@@ -17,6 +20,7 @@ export class AppComponent {
     infoList: UsersData = [];
     isModalActive: boolean = false;
     modalData: ModalData | null = {
+        postTitle: "",
         commentsAmount: 0,
         postText: "",
         comments: []
@@ -49,6 +53,7 @@ export class AppComponent {
     toggleModal(index: number) {
         this.isModalActive = !this.isModalActive;
         if (this.isModalActive) {
+            this.modalData.postTitle = this.infoList[index].title;
             this.modalData.commentsAmount = this.infoList[index].commentsAmount;
             this.modalData.postText = this.infoList[index].text;
             this.dataService.getPostComments(this.infoList[index].id)
@@ -56,9 +61,11 @@ export class AppComponent {
             return;
         }
         this.modalData = {
+            postTitle: "",
             commentsAmount: 0,
             postText: "",
             comments: []
         };
+        return;
     }
 }

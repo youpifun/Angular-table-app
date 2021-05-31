@@ -1,5 +1,3 @@
-import { elementEventFullName } from "@angular/compiler/src/view_compiler/view_compiler";
-
 interface UserData {
     id: number,
     name: string, 
@@ -15,6 +13,7 @@ interface Comment {
 }
 
 export type ModalData = {
+    postTitle: string,
     postText: string,
     commentsAmount: number,
     comments: Array<Comment>
