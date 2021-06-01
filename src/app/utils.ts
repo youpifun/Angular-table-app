@@ -8,9 +8,9 @@ export function reverseColumn(data: UsersData): UsersData {
     return data.reverse();
 }
 
-export function filterData(data: UsersData, filterString: string): UsersData {
+export function filterData(data: UsersData, filterString: string, filterField: string): UsersData {
     let filteredData = data.filter(element => {
-        return element.title.includes(filterString);
+        return element[filterField].includes(filterString);
     });
     return filteredData;
 }

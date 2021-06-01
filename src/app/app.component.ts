@@ -7,21 +7,27 @@ import { sortColumn, reverseColumn, filterData, removeSortsFromTableHeaders } fr
     template: `<modal-window 
                     *ngIf="isModalActive"
                     [modalData]="modalData"
-                    (modalClicked)="toggleModal()"
+                    (closeModal)="toggleModal()"
                 ></modal-window>
                 <search
-                    (filterStringInputed)="handleFilterData($event)"
+                    (filterStringInputed)="handleSearchData($event)"
                 ></search>
+                <active-filters-list 
+                    [activeFilters]="allActiveFiltersData"
+                    (clickedOnRemoveIcon)="removeFilterByKey($event)"
+                ></active-filters-list>
                 <info-table 
                     [infoList]="realInfoList" 
                     (headerClicked)="sortColumnHandler($event)" 
                     (rowClicked)="toggleModal($event)"
+                    (filterChanged)="changeFiltersData($event)"
                 ></info-table>`,
     providers: [DataService]
 })
 export class AppComponent { 
     fullInfoList: UsersData = [];
     realInfoList: UsersData = [];
+    allActiveFiltersData = new Map();
     isModalActive: boolean = false;
     modalData: ModalData = {
         postTitle: "",
@@ -49,12 +55,16 @@ export class AppComponent {
             return;
         }
         removeSortsFromTableHeaders();
+        this.addIconToColumn(target);
+        this.realInfoList = sortColumn(this.realInfoList, target.id);
+        target.classList.add("sorted");
+    }
+
+    addIconToColumn(columnHeaderCell: Element) {
         let sortIcon = document.createElement("img");
         sortIcon.src = "assets/arrow.svg"
         sortIcon.id = "sort-icon";
-        target.appendChild(sortIcon);
-        this.realInfoList = sortColumn(this.realInfoList, target.id);
-        target.classList.add("sorted");
+        columnHeaderCell.appendChild(sortIcon);
     }
 
     toggleModal(index: number) {
@@ -82,8 +92,30 @@ export class AppComponent {
         .then(res => modalData.comments = res);
     }
 
-    handleFilterData(filterText: string) {
+    handleSearchData(filterText: string) {
         removeSortsFromTableHeaders();
-        this.realInfoList = filterData(this.fullInfoList, filterText);
+        this.realInfoList = filterData(this.fullInfoList, filterText, "title");
+    }
+
+    changeFiltersData(filterData: {value: string, filterType: string}){
+        if (filterData.value == "") {
+            this.removeFilterByKey(filterData.filterType);
+            return;
+        }
+        this.allActiveFiltersData.set(filterData.filterType, filterData.value);
+        this.applyFilters(this.allActiveFiltersData);
+    }
+    
+    removeFilterByKey(filterKey: string) {
+        this.allActiveFiltersData.delete(filterKey);
+        this.applyFilters(this.allActiveFiltersData);
+    }
+
+    applyFilters(filtersData) {
+        removeSortsFromTableHeaders();
+        this.realInfoList = this.fullInfoList;
+        for (const filter of filtersData.entries()) {
+            this.realInfoList = filterData(this.realInfoList, filter[1], filter[0])
+        }
     }
 }

@@ -1,0 +1,8 @@
+<hr/>
+<div class="filter-list">
+    <div class="filter-list__filter" *ngFor="let filterData of activeFilters.entries(); let i = index;">
+        {{filterData[0]}}: {{filterData[1]}}
+        <img class="filter-list__remove-filter" src="assets/cross.svg" alt="" (click)="handleRemoveFilter(filterData[0])"/>
+    </div>
+</div>
+<hr/>

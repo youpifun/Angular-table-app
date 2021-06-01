@@ -9,13 +9,13 @@ import { ModalData } from "../data.service";
 
 export class Modal {
     @Input() modalData: ModalData;
-    @Output() modalClicked = new EventEmitter<boolean>()
+    @Output() closeModal = new EventEmitter<boolean>()
 
     handleModalClick($event: MouseEvent) {
         let target = $event.target as HTMLElement;
         if (!(target.classList.contains("modal")||target.classList.contains("modal-container__close-btn"))) {
             return;
         }
-        this.modalClicked.emit();
+        this.closeModal.emit();
     }
 }

@@ -1,8 +1,35 @@
 <table class="info-table">
         <tr class="info-table__row" (click)="handleHeaderClick($event)">
-            <th id="name">Имя пользователя</th>
-            <th id="city">Название города</th>
-            <th id="title">Название публикации</th>
+            <th id="name">
+                <filter-popup
+                    *ngIf="isNameFilterActive"
+                    [filterType]="'name'"
+                    (closePopup)="togglePopup($event)"
+                    (filterInputed)="handleFilterChange($event)"
+                ></filter-popup>
+                <img class="filterIcon" src="assets/filter.svg">
+                Имя пользователя
+            </th>
+            <th id="city">
+                <filter-popup
+                    *ngIf="isCityFilterActive"
+                    [filterType]="'city'"
+                    (closePopup)="togglePopup($event)"
+                    (filterInputed)="handleFilterChange($event)"
+                ></filter-popup>
+                <img class="filterIcon" src="assets/filter.svg">
+                Название города
+            </th>
+            <th id="title">
+                <filter-popup
+                    *ngIf="isTitleFilterActive"
+                    [filterType]="'title'"
+                    (closePopup)="togglePopup($event)"
+                    (filterInputed)="handleFilterChange($event)"
+                ></filter-popup>
+                <img class="filterIcon" src="assets/filter.svg">
+                Название публикации
+            </th>
             <th id="commentsAmount">Количество комментариев</th>
         </tr>
         <tr class="info-table__row" *ngFor="let info of infoList; let i = index" (click)="handleRowClick(i)">
