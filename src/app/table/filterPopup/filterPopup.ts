@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FilterData } from "../../data.service";
 
 @Component({
     selector: "filter-popup",
@@ -7,27 +8,28 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 
 export class FilterPopup {
-    @Input() filterType:string;
-    @Output() filterInputed = new EventEmitter<{value: string, filterType: string}>();
-    @Output() closePopup = new EventEmitter<string>();
+    @Input() fieldToFilter:string;
+    @Input() filterValue: string;
+    @Output() onFilterChange = new EventEmitter<FilterData>();
+    @Output() onPopupClose = new EventEmitter<string>();
 
     lastCallTimer = null;
-    filterValue: string = "";
 
-    filterInputChange() {
-        let filterData = {value: this.filterValue, filterType: this.filterType};
+    filterInputChange($event: InputEvent) {
+        this.filterValue = ($event.target as HTMLInputElement).value;
+        let filterData = {value: this.filterValue, fieldToFilter: this.fieldToFilter};
         clearTimeout(this.lastCallTimer);
-        this.lastCallTimer = setTimeout(() => this.filterInputed.emit(filterData), 500);
+        this.lastCallTimer = setTimeout(() => this.onFilterChange.emit(filterData), 500);
     }
 
     closePopupBtnClick($event: MouseEvent) {
         $event.stopPropagation();
-        this.closePopup.emit(this.filterType);
+        this.onPopupClose.emit(this.fieldToFilter);
     };
 
     clearFilterBtnClick() {
         this.filterValue = "";
-        let filterData = {value: this.filterValue, filterType: this.filterType};
-        this.filterInputed.emit(filterData);
+        let filterData = {value: this.filterValue, fieldToFilter: this.fieldToFilter};
+        this.onFilterChange.emit(filterData);
     }
 }

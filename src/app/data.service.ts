@@ -1,10 +1,11 @@
-interface UserData {
+export interface Post {
     id: number,
-    name: string, 
-    city: string,
+    authorName: string, 
+    authorCity: string,
     title: string,
     text: string,
-    commentsAmount: string
+    comments: Comment[],
+    commentsAmount: number
 }
 
 interface Comment {
@@ -12,45 +13,28 @@ interface Comment {
     commentText: string
 }
 
-export type ModalData = {
-    postTitle: string,
-    postText: string,
-    commentsAmount: string,
-    comments: Array<Comment>
-}
+export type FiltersData = Map<string, string>;
 
-export type UsersData = Array<UserData>
+export type FilterData = {fieldToFilter: string, value: string}
 
 export class DataService {
-    async getUsersData() {
-        let response = await fetch("https://jsonplaceholder.typicode.com/posts?_expand=user")
+    async getUsersData(): Promise<Array<Post>> {
+        let response = await fetch("https://jsonplaceholder.typicode.com/posts?_expand=user&_embed=comments")
         let result = await response.json();
-        let usersData: UsersData = result.map(async (element) =>  {
+        let postsData: Array<Post> = result.map(async (element) =>  {
             return {
                 id: element.id,
-                name: element.user.name,
-                city: element.user.address.city,
+                authorName: element.user.name,
+                authorCity: element.user.address.city,
                 title: element.title,
                 text: element.body,
-                commentsAmount: await this.getCommentsAmount(element.id)
+                comments: element.comments.map(item => ({
+                    email: item.email,
+                    commentText: item.body
+                })),
+                commentsAmount: element.comments.length.toString()
             };  
         });
-        return usersData;
-    }
-
-    async getCommentsAmount(postId: number): Promise<string> {
-        let response = await fetch("https://jsonplaceholder.typicode.com/comments?postId="+postId);
-        let result = await response.json();
-        return result.length.toString();
-    }
-
-    async getPostComments(postId: number): Promise<Comment[]> {
-        let response = await fetch("https://jsonplaceholder.typicode.com/comments?postId="+postId);
-        let result = await response.json();
-        let comments: Comment[] = result.map(element => ({
-            email: element.email,
-            commentText: element.body
-        }))
-        return comments;
+        return postsData;
     }
 }

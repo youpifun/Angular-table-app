@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ModalData } from "../data.service";
+import { Post } from "../data.service";
 
 @Component ({
     selector: "modal-window",
@@ -8,7 +8,7 @@ import { ModalData } from "../data.service";
 })
 
 export class Modal {
-    @Input() modalData: ModalData;
+    @Input() curPost: Post;
     @Output() closeModal = new EventEmitter<boolean>()
 
     handleModalClick($event: MouseEvent) {

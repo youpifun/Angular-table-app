@@ -1,3 +1,5 @@
+$closeBtnSize: 17px;
+
 .popup-window {
     position: absolute;
     display: flex;
@@ -23,12 +25,15 @@
 
 .popup-window__close-btn {
     position: absolute;
-    background-color: darkgray;
-    color: #fff;
+    background-color: #a9a9a9;
+    color: black;
     right: 3px;
     top: 3px;
-    width: 17px;
-    height: 17px;
+    text-align: center;
+    width: $closeBtnSize;
+    line-height: $closeBtnSize;
+    height: $closeBtnSize;
+    font-size: 13px;
     border-radius: 5px;
     cursor: pointer;
         &:hover {

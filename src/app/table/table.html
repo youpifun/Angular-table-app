@@ -1,41 +1,24 @@
 <table class="info-table">
         <tr class="info-table__row" (click)="handleHeaderClick($event)">
-            <th id="name">
-                <filter-popup
-                    *ngIf="isNameFilterActive"
-                    [filterType]="'name'"
-                    (closePopup)="togglePopup($event)"
-                    (filterInputed)="handleFilterChange($event)"
-                ></filter-popup>
-                <img class="filterIcon" src="assets/filter.svg">
-                Имя пользователя
+            <th [id]="column.key" [class.sorted]="column.value.isSorted" *ngFor="let column of columnsArray | keyvalue: originalOrderComparator">
+                <div *ngIf="column.value.filtrable">
+                    <filter-popup
+                        *ngIf="column.value.isFilterActive"
+                        [fieldToFilter]="column.key"
+                        [filterValue]="filters.get(column.key) ?? ''"
+                        (onPopupClose)="togglePopup($event)"
+                        (onFilterChange)="handleFilterChange($event)"
+                    ></filter-popup>
+                    <img class="filterIcon" src="assets/filter.svg" (click)="handleFilterIconClick($event, column.key)">
+                </div>
+                {{column.value.columnText}}
+                <img *ngIf="column.value.isSorted" [class.rotated]="column.value.isIconRotated" src="assets/arrow.svg" class="sortIcon" alt="">
             </th>
-            <th id="city">
-                <filter-popup
-                    *ngIf="isCityFilterActive"
-                    [filterType]="'city'"
-                    (closePopup)="togglePopup($event)"
-                    (filterInputed)="handleFilterChange($event)"
-                ></filter-popup>
-                <img class="filterIcon" src="assets/filter.svg">
-                Название города
-            </th>
-            <th id="title">
-                <filter-popup
-                    *ngIf="isTitleFilterActive"
-                    [filterType]="'title'"
-                    (closePopup)="togglePopup($event)"
-                    (filterInputed)="handleFilterChange($event)"
-                ></filter-popup>
-                <img class="filterIcon" src="assets/filter.svg">
-                Название публикации
-            </th>
-            <th id="commentsAmount">Количество комментариев</th>
         </tr>
-        <tr class="info-table__row" *ngFor="let info of infoList; let i = index" (click)="handleRowClick(i)">
-            <td>{{info.name}}</td>
-            <td>{{info.city}}</td>
-            <td>{{info.title}}</td>
-            <td>{{info.commentsAmount}}</td>
+        <tr class="info-table__row" *ngFor="let post of posts; let i = index" (click)="handleRowClick(i)">
+            <td>{{post.authorName}}</td>
+            <td>{{post.authorCity}}</td>
+            <td>{{post.title}}</td>
+            <td>{{post.commentsAmount}}</td>
         </tr>
 </table>

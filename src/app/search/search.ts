@@ -8,10 +8,10 @@ import { Component, Output, EventEmitter } from "@angular/core";
 
 export class Search {
     lastCallTimer = null;
-    @Output() filterStringInputed = new EventEmitter<string>();
+    @Output() onQueryInput = new EventEmitter<string>();
     handleUserInput($event: InputEvent) {
         let target = $event.target as HTMLInputElement
         clearTimeout(this.lastCallTimer);
-        this.lastCallTimer = setTimeout(() => this.filterStringInputed.emit(target.value), 500);
+        this.lastCallTimer = setTimeout(() => this.onQueryInput.emit(target.value), 500);
     }
 }

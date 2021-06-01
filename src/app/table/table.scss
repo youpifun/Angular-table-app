@@ -14,6 +14,7 @@ $grayBorder: 1px solid gray;
 	padding: 5px;
 	background: #bebebe;
 	border: $grayBorder;
+	user-select: none;
     &:hover {
         background: #9c9c9c;
     }
@@ -47,4 +48,15 @@ $grayBorder: 1px solid gray;
 	left: 5px;
 	width: 20px;
 	height: 20px;
+}
+
+.sortIcon {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	right: 5px;
+}
+
+.rotated {
+	transform: rotate(180deg);
 }

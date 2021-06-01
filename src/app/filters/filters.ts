@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { FiltersData } from "../data.service";
 
 @Component({
     selector: "active-filters-list",
@@ -7,10 +8,10 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 })
 
 export class Filters {
-    @Input() activeFilters;
-    @Output() clickedOnRemoveIcon = new EventEmitter<string>();
-    
+    @Input() filters: FiltersData;
+    @Output() onRemoveIconClick = new EventEmitter<string>();
+
     handleRemoveFilter(filterKey: string){
-        this.clickedOnRemoveIcon.emit(filterKey);
+        this.onRemoveIconClick.emit(filterKey);
     }
 }
