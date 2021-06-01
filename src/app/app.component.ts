@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { DataService, UsersData, ModalData } from "./data.service";
-import { sortColumn, reverseColumn, filterData, removeSortsFromTableHeaders } from "./utils";
+import { sortColumn, reverseColumn, filterData, removeSortsFromTableHeaders, addIconToTableHeader } from "./utils";
 
 @Component({
     selector: "table-app",
@@ -28,13 +28,17 @@ export class AppComponent {
     fullInfoList: UsersData = [];
     realInfoList: UsersData = [];
     allActiveFiltersData = new Map();
+    filterOnSearchResult: boolean = false;
+    searchText: string = "";
     isModalActive: boolean = false;
     modalData: ModalData = {
         postTitle: "",
-        commentsAmount: 0,
+        commentsAmount: "",
         postText: "",
         comments: []
     };
+
+    searchFields: Array<string> = ["name", "city", "title", "commentsAmount"];
 
     constructor(private dataService : DataService){}
 
@@ -48,23 +52,16 @@ export class AppComponent {
         })();
     }
     
-    sortColumnHandler(target: Element) {
+    sortColumnHandler(target: HTMLTableHeaderCellElement) {
         if (target.classList.contains("sorted")) {
            document.getElementById("sort-icon").classList.toggle("rotated");
             this.realInfoList = reverseColumn(this.realInfoList);
             return;
         }
         removeSortsFromTableHeaders();
-        this.addIconToColumn(target);
+        addIconToTableHeader(target);
         this.realInfoList = sortColumn(this.realInfoList, target.id);
         target.classList.add("sorted");
-    }
-
-    addIconToColumn(columnHeaderCell: Element) {
-        let sortIcon = document.createElement("img");
-        sortIcon.src = "assets/arrow.svg"
-        sortIcon.id = "sort-icon";
-        columnHeaderCell.appendChild(sortIcon);
     }
 
     toggleModal(index: number) {
@@ -75,7 +72,7 @@ export class AppComponent {
         }
         this.modalData = {
             postTitle: "",
-            commentsAmount: 0,
+            commentsAmount: "",
             postText: "",
             comments: []
         };
@@ -92,17 +89,23 @@ export class AppComponent {
         .then(res => modalData.comments = res);
     }
 
-    handleSearchData(filterText: string) {
+    handleSearchData(searchText: string) {
+        this.searchText = searchText;
         removeSortsFromTableHeaders();
-        this.realInfoList = filterData(this.fullInfoList, filterText, "title");
+        this.filterOnSearchResult = (searchText == "") ? false : true;
+        this.applyFilters(this.allActiveFiltersData);
     }
 
-    changeFiltersData(filterData: {value: string, filterType: string}){
-        if (filterData.value == "") {
-            this.removeFilterByKey(filterData.filterType);
+    doSearch(searchText: string): UsersData {
+        return filterData(this.fullInfoList, searchText, this.searchFields);
+    }
+
+    changeFiltersData(filter: {value: string, filterType: string}){
+        if (filter.value == "") {
+            this.removeFilterByKey(filter.filterType);
             return;
         }
-        this.allActiveFiltersData.set(filterData.filterType, filterData.value);
+        this.allActiveFiltersData.set(filter.filterType, filter.value);
         this.applyFilters(this.allActiveFiltersData);
     }
     
@@ -113,9 +116,9 @@ export class AppComponent {
 
     applyFilters(filtersData) {
         removeSortsFromTableHeaders();
-        this.realInfoList = this.fullInfoList;
+        this.realInfoList = (this.filterOnSearchResult) ? this.doSearch(this.searchText) : this.fullInfoList;
         for (const filter of filtersData.entries()) {
-            this.realInfoList = filterData(this.realInfoList, filter[1], filter[0])
+            this.realInfoList = filterData(this.realInfoList, filter[1], [filter[0]])
         }
     }
 }
