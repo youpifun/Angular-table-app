@@ -63,6 +63,7 @@ export class Table {
         } else {
             for (const column in this.columnsArray) {
                 this.columnsArray[column].isSorted = false;
+                this.columnsArray[column].isIconRotated = false;
             }
             this.posts = sortColumn(this.posts, columnId);
             this.columnsArray[columnId].isSorted = true;
