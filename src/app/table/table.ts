@@ -12,7 +12,7 @@ export class Table {
     @Input() posts: Array<Post>;
     @Input() filters: FiltersData;
     @Output() onRowClick = new EventEmitter<number>();
-    @Output() onFilterChange = new EventEmitter<FilterData>();
+    @Output() onFilterChange = new EventEmitter<boolean>();
 
     ngOnChanges() {
         for (const column in this.columnsArray) {
@@ -84,6 +84,11 @@ export class Table {
     }
 
     handleFilterChange(filterData: FilterData) {
-        this.onFilterChange.emit(filterData);
+        if (filterData.value == "") {
+            this.filters.delete(filterData.fieldToFilter);
+        } else {
+            this.filters.set(filterData.fieldToFilter, filterData.value);
+        }
+        this.onFilterChange.emit();
     }
 } 

@@ -9,9 +9,10 @@ import { FiltersData } from "../data.service";
 
 export class Filters {
     @Input() filters: FiltersData;
-    @Output() onRemoveIconClick = new EventEmitter<string>();
+    @Output() onRemoveIconClick = new EventEmitter<boolean>();
 
     handleRemoveFilter(filterKey: string){
-        this.onRemoveIconClick.emit(filterKey);
+        this.filters.delete(filterKey);
+        this.onRemoveIconClick.emit();
     }
 }

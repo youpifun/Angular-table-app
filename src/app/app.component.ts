@@ -15,13 +15,13 @@ import { filterData } from "./utils";
                 <active-filters-list
                     *ngIf="activeFilters.size != 0"
                     [filters]="activeFilters"
-                    (onRemoveIconClick)="removeFilterByKey($event)"
+                    (onRemoveIconClick)="applyFilters()"
                 ></active-filters-list>
                 <info-table
                     [posts]="filteredPosts"
                     [filters]="activeFilters"
                     (onRowClick)="toggleModal($event)"
-                    (onFilterChange)="changeFiltersData($event)"
+                    (onFilterChange)="applyFilters()"
                 ></info-table>`,
     providers: [DataService]
 })
@@ -55,23 +55,9 @@ export class AppComponent {
             this.curPost = this.filteredPosts[index];
         }
     }
-    
-    removeFilterByKey(filterKey: string) {
-        this.activeFilters.delete(filterKey);
-        this.applyFilters();
-    }
 
     handleSearchData(searchQuery: string) {
         this.searchQuery = searchQuery;
-        this.applyFilters();
-    }
-
-    changeFiltersData(filter: FilterData) {
-        if (filter.value == "") {
-            this.removeFilterByKey(filter.fieldToFilter);
-        } else {
-            this.activeFilters.set(filter.fieldToFilter, filter.value);
-        }
         this.applyFilters();
     }
 
