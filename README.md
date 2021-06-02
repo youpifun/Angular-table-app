@@ -1,7 +1,7 @@
 # Angular-table-app
 SPA on Angular 12
 
-### Start project
+### Start application
 
 ```
 npm install
