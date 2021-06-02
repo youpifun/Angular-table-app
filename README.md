@@ -5,5 +5,5 @@ SPA on Angular 12
 
 ```
 npm install
-npm run serve
+ng serve --open
 ```
